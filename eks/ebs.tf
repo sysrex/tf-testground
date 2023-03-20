@@ -1,8 +1,10 @@
 # EBS for Testground daemon datadir
 resource "aws_ebs_volume" "testground-daemon-datadir" {
-  availability_zone = data.vpc.vpc_azs
+  availability_zone = module.vpc.azs[0]
   size = 10
-  type = "gp2"
+  type = "gp3"
 
-  tags = "testground"
+  tags = {
+    "project": "testground"
+  }
 }
