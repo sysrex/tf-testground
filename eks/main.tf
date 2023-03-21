@@ -3,8 +3,6 @@ locals {
   project_name = "celestia"
   environment  = "testground"
   vpc_cidr     = "10.1"
-  //kubelet_extra_args     = "--max-pods=58 --use-max-pods=false"
-
 }
 
 ################################################################################
@@ -110,7 +108,6 @@ module "eks_blueprints" {
       k8s_labels      = {
         "testground.node.role.infra" = "true"
       }
-
       //remote_access = true
       //ec2_ssh_key   = "sysrex"
 
@@ -149,7 +146,6 @@ module "eks_blueprints" {
       * hard nofile 262144
       LIMITS'
       EOT
-
 
 //      iam:
 // attachPolicyARNs:
@@ -255,8 +251,23 @@ module "eks_blueprints_kubernetes_addons" {
   enable_aws_efs_csi_driver            = true
 
   #K8s Add-ons
-  enable_argocd                       = true
   enable_metrics_server               = true
   enable_cluster_autoscaler           = true
   enable_aws_load_balancer_controller = true
+  enable_argocd                       = true
+
+
+  argocd_helm_config = {
+    values = [templatefile("${path.module}/argocd-values.yaml", {})]
+  }
+}
+
+// https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
+resource "aws_s3_bucket" "bucket" {
+  bucket = "${local.project_name}-${local.environment}"
+  acl    = "private"
+
+  versioning {
+    enabled = true
+  }
 }
