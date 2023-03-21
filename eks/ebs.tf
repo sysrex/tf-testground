@@ -8,3 +8,15 @@ resource "aws_ebs_volume" "testground-daemon-datadir" {
     "project": "testground"
   }
 }
+
+resource "kubernetes_secret" "tg-daemon-datadir-pv" {
+  metadata {
+    name = "testground-daemon-datadir-pv"
+  }
+
+  data = {
+    volumeID = "${aws_ebs_volume.testground-daemon-datadir.id}"
+  }
+
+  type = "kubernetes.io/generic"
+}
