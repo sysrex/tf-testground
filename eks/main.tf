@@ -78,6 +78,16 @@ module "eks_blueprints" {
   # List of map_users
   map_users = [
     {
+      userarn  = "arn:aws:iam::506657148836:user/samuel@celestia.org"
+      username = "samuel@celestia.org"
+      groups   = ["system:masters"]
+    },
+    {
+      userarn  = "arn:aws:iam::506657148836:user/viet@celestia.org"
+      username = "viet@celestia.org"
+      groups   = ["system:masters"]
+    },
+    {
       userarn  = "arn:aws:iam::506657148836:user/alexk@celestia.org"
       username = "alexk@celestia.org"
       groups   = ["system:masters"]
