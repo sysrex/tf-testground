@@ -119,33 +119,33 @@ module "eks_blueprints" {
      create_launch_template = true
      kubelet_extra_args     = "--use-max-pods=false --max-pods=58"
      //bootstrap_extra_args   = ""
-      pre_userdata = <<-EOT
-      sudo bash -c 'cat <<SYSCTL > /etc/sysctl.d/999-testground.conf
-      fs.file-max = 3178504
-      net.core.somaxconn = 131072
-      net.netfilter.nf_conntrack_max = 1048576
-      net.core.netdev_max_backlog = 524288
-      net.core.rmem_max = 16777216
-      net.core.wmem_max = 16777216
-      net.ipv4.tcp_rmem = 16384 131072 16777216
-      net.ipv4.tcp_wmem = 16384 131072 16777216
-      net.ipv4.tcp_mem = 262144 524288 1572864
-      net.ipv4.tcp_max_syn_backlog = 131072
-      net.ipv4.ip_local_port_range = 10000 65535
-      net.ipv4.tcp_tw_reuse = 1
-      net.ipv4.ip_forward = 1
-      net.ipv4.conf.all.rp_filter = 0
-      net.ipv4.neigh.default.gc_thresh2 = 4096
-      net.ipv4.neigh.default.gc_thresh3 = 32768
-      SYSCTL'
-      sudo sysctl -p /etc/sysctl.d/999-testground.conf
-      sudo bash -c 'cat <<LIMITS > /etc/security/limits.d/999-limits.conf
-      * soft nproc 131072
-      * hard nproc 262144
-      * soft nofile 131072
-      * hard nofile 262144
-      LIMITS'
-      EOT
+      //pre_userdata = <<-EOT
+      //sudo bash -c 'cat <<SYSCTL > /etc/sysctl.d/999-testground.conf
+      //fs.file-max = 3178504
+      //net.core.somaxconn = 131072
+      //net.netfilter.nf_conntrack_max = 1048576
+      //net.core.netdev_max_backlog = 524288
+      //net.core.rmem_max = 16777216
+      //net.core.wmem_max = 16777216
+      //net.ipv4.tcp_rmem = 16384 131072 16777216
+      //net.ipv4.tcp_wmem = 16384 131072 16777216
+      //net.ipv4.tcp_mem = 262144 524288 1572864
+      //net.ipv4.tcp_max_syn_backlog = 131072
+      //net.ipv4.ip_local_port_range = 10000 65535
+      //net.ipv4.tcp_tw_reuse = 1
+      //net.ipv4.ip_forward = 1
+      //net.ipv4.conf.all.rp_filter = 0
+      //net.ipv4.neigh.default.gc_thresh2 = 4096
+      //net.ipv4.neigh.default.gc_thresh3 = 32768
+      //SYSCTL'
+      //sudo sysctl -p /etc/sysctl.d/999-testground.conf
+      //sudo bash -c 'cat <<LIMITS > /etc/security/limits.d/999-limits.conf
+      //* soft nproc 131072
+      //* hard nproc 262144
+      //* soft nofile 131072
+      //* hard nofile 262144
+      //LIMITS'
+      //EOT
 
 //      iam:
 // attachPolicyARNs:
@@ -178,33 +178,33 @@ module "eks_blueprints" {
       bootstrap_extra_args   = ""
 
       # pre_userdata can be used in both cases where you provide custom_ami_id or ami_type
-      pre_userdata = <<-EOT
-      sudo bash -c 'cat <<SYSCTL > /etc/sysctl.d/999-testground.conf
-      fs.file-max = 3178504
-      net.core.somaxconn = 131072
-      net.netfilter.nf_conntrack_max = 1048576
-      net.core.netdev_max_backlog = 524288
-      net.core.rmem_max = 16777216
-      net.core.wmem_max = 16777216
-      net.ipv4.tcp_rmem = 16384 131072 16777216
-      net.ipv4.tcp_wmem = 16384 131072 16777216
-      net.ipv4.tcp_mem = 262144 524288 1572864
-      net.ipv4.tcp_max_syn_backlog = 131072
-      net.ipv4.ip_local_port_range = 10000 65535
-      net.ipv4.tcp_tw_reuse = 1
-      net.ipv4.ip_forward = 1
-      net.ipv4.conf.all.rp_filter = 0
-      net.ipv4.neigh.default.gc_thresh2 = 4096
-      net.ipv4.neigh.default.gc_thresh3 = 32768
-      SYSCTL'
-      sudo sysctl -p /etc/sysctl.d/999-testground.conf"
-      sudo bash -c 'cat <<LIMITS > /etc/security/limits.d/999-limits.conf
-      * soft nproc 131072
-      * hard nproc 262144
-      * soft nofile 131072
-      * hard nofile 262144
-      LIMITS'
-      EOT
+      //pre_userdata = <<-EOT
+      //sudo bash -c 'cat <<SYSCTL > /etc/sysctl.d/999-testground.conf
+      //fs.file-max = 3178504
+      //net.core.somaxconn = 131072
+      //net.netfilter.nf_conntrack_max = 1048576
+      //net.core.netdev_max_backlog = 524288
+      //net.core.rmem_max = 16777216
+      //net.core.wmem_max = 16777216
+      //net.ipv4.tcp_rmem = 16384 131072 16777216
+      //net.ipv4.tcp_wmem = 16384 131072 16777216
+      //net.ipv4.tcp_mem = 262144 524288 1572864
+      //net.ipv4.tcp_max_syn_backlog = 131072
+      //net.ipv4.ip_local_port_range = 10000 65535
+      //net.ipv4.tcp_tw_reuse = 1
+      //net.ipv4.ip_forward = 1
+      //net.ipv4.conf.all.rp_filter = 0
+      //net.ipv4.neigh.default.gc_thresh2 = 4096
+      //net.ipv4.neigh.default.gc_thresh3 = 32768
+      //SYSCTL'
+      //sudo sysctl -p /etc/sysctl.d/999-testground.conf"
+      //sudo bash -c 'cat <<LIMITS > /etc/security/limits.d/999-limits.conf
+      //* soft nproc 131072
+      //* hard nproc 262144
+      //* soft nofile 131072
+      //* hard nofile 262144
+      //LIMITS'
+      //EOT
     }
 
 //      iam:
