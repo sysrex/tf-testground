@@ -34,6 +34,7 @@ module "vpc" {
   single_nat_gateway     = true
   one_nat_gateway_per_az = false
 
+
   tags = {
     Terraform   = "true"
     Createdby   = "sysrex"
@@ -70,8 +71,20 @@ module "eks_blueprints" {
   cluster_endpoint_private_access = "true"
   cluster_endpoint_public_access  = "true"
 
+
+
   # List of map_users
   map_users = [
+    {
+      userarn  = "arn:aws:iam::506657148836:user/samuel@celestia.org"
+      username = "samuel@celestia.org"
+      groups   = ["system:masters"]
+    },
+    {
+      userarn  = "arn:aws:iam::506657148836:user/viet@celestia.org"
+      username = "viet@celestia.org"
+      groups   = ["system:masters"]
+    },
     {
       userarn  = "arn:aws:iam::506657148836:user/alexk@celestia.org"
       username = "alexk@celestia.org"
@@ -95,15 +108,52 @@ module "eks_blueprints" {
       k8s_labels      = {
         "testground.node.role.infra" = "true"
       }
-
-      remote_access = true
-      ec2_ssh_key   = "sysrex"
+      //remote_access = true
+      //ec2_ssh_key   = "sysrex"
 
       # Node Group scaling configuration
       max_size     = 80
       min_size     = 3
       desired_size = 3
+  
+     create_launch_template = true
+     kubelet_extra_args     = "--use-max-pods=false --max-pods=58"
+     //bootstrap_extra_args   = ""
+      //pre_userdata = <<-EOT
+      //sudo bash -c 'cat <<SYSCTL > /etc/sysctl.d/999-testground.conf
+      //fs.file-max = 3178504
+      //net.core.somaxconn = 131072
+      //net.netfilter.nf_conntrack_max = 1048576
+      //net.core.netdev_max_backlog = 524288
+      //net.core.rmem_max = 16777216
+      //net.core.wmem_max = 16777216
+      //net.ipv4.tcp_rmem = 16384 131072 16777216
+      //net.ipv4.tcp_wmem = 16384 131072 16777216
+      //net.ipv4.tcp_mem = 262144 524288 1572864
+      //net.ipv4.tcp_max_syn_backlog = 131072
+      //net.ipv4.ip_local_port_range = 10000 65535
+      //net.ipv4.tcp_tw_reuse = 1
+      //net.ipv4.ip_forward = 1
+      //net.ipv4.conf.all.rp_filter = 0
+      //net.ipv4.neigh.default.gc_thresh2 = 4096
+      //net.ipv4.neigh.default.gc_thresh3 = 32768
+      //SYSCTL'
+      //sudo sysctl -p /etc/sysctl.d/999-testground.conf
+      //sudo bash -c 'cat <<LIMITS > /etc/security/limits.d/999-limits.conf
+      //* soft nproc 131072
+      //* hard nproc 262144
+      //* soft nofile 131072
+      //* hard nofile 262144
+      //LIMITS'
+      //EOT
 
+//      iam:
+// attachPolicyARNs:
+// - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+// - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+// - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+// - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+// - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
     },
     ng-2-plan = {
       node_group_name = "ng-2-plan"
@@ -115,15 +165,56 @@ module "eks_blueprints" {
         "testground.node.role.plan" = "true"
       }
 
-      remote_access = true
-      ec2_ssh_key   = "sysrex"
+      //remote_access = true
+      //ec2_ssh_key   = "sysrex"
 
       # Node Group scaling configuration
       max_size     = 200
       min_size     = 6
       desired_size = 6
 
+      create_launch_template = true
+      kubelet_extra_args     = "--max-pods=234 --allowed-unsafe-sysctls=net.core.somaxconn --use-max-pods=false"
+      bootstrap_extra_args   = ""
+
+      # pre_userdata can be used in both cases where you provide custom_ami_id or ami_type
+      //pre_userdata = <<-EOT
+      //sudo bash -c 'cat <<SYSCTL > /etc/sysctl.d/999-testground.conf
+      //fs.file-max = 3178504
+      //net.core.somaxconn = 131072
+      //net.netfilter.nf_conntrack_max = 1048576
+      //net.core.netdev_max_backlog = 524288
+      //net.core.rmem_max = 16777216
+      //net.core.wmem_max = 16777216
+      //net.ipv4.tcp_rmem = 16384 131072 16777216
+      //net.ipv4.tcp_wmem = 16384 131072 16777216
+      //net.ipv4.tcp_mem = 262144 524288 1572864
+      //net.ipv4.tcp_max_syn_backlog = 131072
+      //net.ipv4.ip_local_port_range = 10000 65535
+      //net.ipv4.tcp_tw_reuse = 1
+      //net.ipv4.ip_forward = 1
+      //net.ipv4.conf.all.rp_filter = 0
+      //net.ipv4.neigh.default.gc_thresh2 = 4096
+      //net.ipv4.neigh.default.gc_thresh3 = 32768
+      //SYSCTL'
+      //sudo sysctl -p /etc/sysctl.d/999-testground.conf"
+      //sudo bash -c 'cat <<LIMITS > /etc/security/limits.d/999-limits.conf
+      //* soft nproc 131072
+      //* hard nproc 262144
+      //* soft nofile 131072
+      //* hard nofile 262144
+      //LIMITS'
+      //EOT
     }
+
+//      iam:
+// attachPolicyARNs:
+// - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess
+// - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+// - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+// - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+// - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+
   }
 
   cluster_security_group_additional_rules = {
@@ -160,9 +251,23 @@ module "eks_blueprints_kubernetes_addons" {
   enable_aws_efs_csi_driver            = true
 
   #K8s Add-ons
-  enable_argocd                       = true
   enable_metrics_server               = true
   enable_cluster_autoscaler           = true
   enable_aws_load_balancer_controller = true
+  enable_argocd                       = true
 
+
+  argocd_helm_config = {
+    values = [templatefile("${path.module}/argocd-values.yaml", {})]
+  }
+}
+
+// https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
+resource "aws_s3_bucket" "bucket" {
+  bucket = "${local.project_name}-${local.environment}"
+  acl    = "private"
+
+  versioning {
+    enabled = true
+  }
 }
